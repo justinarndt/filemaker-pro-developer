@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lancaster Hub — PBM System | FileMaker Pro 2026</title>
+    <meta name="description" content="Production-grade Pharmacy Benefit Management system built with FileMaker Pro architecture. Designed by Justin Arndt, 11x Claris Certified Developer.">
+    <link rel="stylesheet" href="css/lancaster.css">
+    <style>
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: #3c3c3c;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 9999; color: #e0e0e0;
+        }
+        #loading-screen .logo { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -1px; }
+        #loading-screen .logo span { color: #0066cc; }
+        #loading-screen .sub { font-size: 11px; color: #888; margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; }
+        #loading-screen .bar { width: 200px; height: 3px; background: #555; border-radius: 2px; overflow: hidden; }
+        #loading-screen .bar-fill { height: 100%; background: #0066cc; border-radius: 2px; animation: loadbar 1.5s ease-in-out; width: 100%; }
+        @keyframes loadbar { from { width: 0; } to { width: 100%; } }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="logo">Lancaster<span>Hub</span></div>
+        <div class="sub">Pharmacy Benefit Management</div>
+        <div class="bar"><div class="bar-fill"></div></div>
+    </div>
+
+    <!-- Application Shell -->
+    <div class="fm-app" id="app" style="display:none;">
+
+        <!-- ═══ TOOLBAR ═══ -->
+        <div class="fm-toolbar">
+            <div class="fm-toolbar-group">
+                <button class="fm-toolbar-btn" title="New Record" onclick="newRecord()">📄</button>
+                <button class="fm-toolbar-btn" title="Delete Record" onclick="deleteRecord()">🗑️</button>
+                <button class="fm-toolbar-btn" title="Find Mode">🔍</button>
+                <button class="fm-toolbar-btn" title="Sort Records">↕️</button>
+            </div>
+            <div class="fm-toolbar-group">
+                <button class="fm-toolbar-btn" title="Sync Medications" onclick="syncMedications()">🔄</button>
+                <button class="fm-toolbar-btn" title="Run Script">⚡</button>
+                <button class="fm-toolbar-btn" title="Print">🖨️</button>
+            </div>
+            <div class="fm-toolbar-title">
+                The Lancaster Hub — <span id="toolbar-layout-name">Dashboard</span>
+                <span class="fm-toolbar-badge">🔒 HIPAA Compliant</span>
+            </div>
+            <div class="fm-toolbar-group">
+                <select id="role-selector" class="fm-field-input" style="height:24px;font-size:11px;width:140px;background:#555;color:#e0e0e0;border-color:#666;" onchange="switchRole(this.value)">
+                    <option value="pharmacist">👨‍⚕️ Pharmacist</option>
+                    <option value="technician">👩‍💼 Technician</option>
+                    <option value="auditor">👁️ Auditor</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ═══ STATUS BAR ═══ -->
+        <div class="fm-statusbar">
+            <div class="fm-statusbar-left">
+                <div class="fm-record-nav">
+                    <button onclick="navFirst()">⏮</button>
+                    <button onclick="navPrev()">◀</button>
+                    <span class="current" id="record-indicator">Record 1 of 500</span>
+                    <button onclick="navNext()">▶</button>
+                    <button onclick="navLast()">⏭</button>
+                </div>
+            </div>
+            <div class="fm-statusbar-center">
+                <div class="fm-mode-indicator">
+                    <span class="fm-mode-dot"></span>
+                    <span id="mode-text">Browse Mode</span>
+                </div>
+            </div>
+            <div class="fm-statusbar-right">
+                <span>FileMaker Pro 2026</span>
+                <span>|</span>
+                <span id="current-time"></span>
+            </div>
+        </div>
+
+        <!-- ═══ CONTENT AREA ═══ -->
+        <div class="fm-content">
+            <!-- Sidebar (Layout Navigation) -->
+            <div class="fm-sidebar">
+                <div class="fm-sidebar-header">Layouts</div>
+                <div class="fm-sidebar-item active" data-layout="dashboard" onclick="switchLayout(this)">
+                    <span class="icon">📊</span> Dashboard
+                </div>
+                <div class="fm-sidebar-item" data-layout="patients" onclick="switchLayout(this)">
+                    <span class="icon">👤</span> Patients
+                    <span class="badge">500</span>
+                </div>
+                <div class="fm-sidebar-item" data-layout="providers" onclick="switchLayout(this)">
+                    <span class="icon">🏥</span> Providers
+                    <span class="badge">50</span>
+                </div>
+                <div class="fm-sidebar-item" data-layout="medications" onclick="switchLayout(this)">
+                    <span class="icon">💊</span> Medications
+                    <span class="badge">30</span>
+                </div>
+                <div class="fm-sidebar-item" data-layout="claims" onclick="switchLayout(this)">
+                    <span class="icon">📋</span> Claims
+                    <span class="badge">200</span>
+                </div>
+                <div class="fm-sidebar-divider"></div>
+                <div class="fm-sidebar-item" data-layout="audit" onclick="switchLayout(this)">
+                    <span class="icon">📜</span> Audit Trail
+                </div>
+                <div class="fm-sidebar-item" data-layout="erd" onclick="switchLayout(this)">
+                    <span class="icon">🔗</span> Relationship Graph
+                </div>
+                <div class="fm-sidebar-item" data-layout="scripts" onclick="switchLayout(this)">
+                    <span class="icon">⚡</span> Script Workspace
+                </div>
+                <div class="fm-sidebar-divider"></div>
+                <div class="fm-sidebar-item" data-layout="security" onclick="switchLayout(this)">
+                    <span class="icon">🔐</span> Security
+                </div>
+                <div class="fm-sidebar-item" data-layout="about" onclick="switchLayout(this)">
+                    <span class="icon">ℹ️</span> About
+                </div>
+
+                <!-- User Indicator -->
+                <div class="fm-user-indicator">
+                    <div class="fm-user-avatar" id="user-avatar">JA</div>
+                    <div class="fm-user-info">
+                        <div class="fm-user-name">Justin Arndt</div>
+                        <div class="fm-user-role" id="user-role-display">Pharmacist (Full Access)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="fm-main" id="main-content">
+                <!-- Content is dynamically loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ POPOVER (Modal) ═══ -->
+    <div class="fm-popover-overlay" id="popover-overlay" onclick="closePopover()">
+        <div class="fm-popover" onclick="event.stopPropagation()">
+            <div class="fm-popover-header">
+                <span id="popover-title">Detail</span>
+                <button class="fm-popover-close" onclick="closePopover()">✕</button>
+            </div>
+            <div class="fm-popover-body" id="popover-body"></div>
+        </div>
+    </div>
+
+    <script src="js/layouts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

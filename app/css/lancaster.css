@@ -1,0 +1,1035 @@
+/* ============================================================================
+   THE LANCASTER HUB — FileMaker Pro 2026 UI Theme
+   ============================================================================
+   This CSS recreates the authentic FileMaker Pro desktop application look:
+   - Gray toolbar with icon buttons
+   - Status toolbar with mode indicator
+   - Form-style layouts with labeled fields
+   - Portal (list view) styling
+   - Tab Controls
+   - Popover buttons
+   - Record navigation (Book icon pattern)
+   ============================================================================ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── CSS Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Design Tokens (FileMaker Pro 2026 Color Palette) ── */
+:root {
+    /* FM Chrome */
+    --fm-toolbar-bg: #3c3c3c;
+    --fm-toolbar-border: #2a2a2a;
+    --fm-toolbar-text: #e0e0e0;
+    --fm-toolbar-hover: #505050;
+    --fm-toolbar-active: #0066cc;
+    --fm-status-bg: #f0f0f0;
+    --fm-status-border: #c8c8c8;
+
+    /* FM Layout Background */
+    --fm-layout-bg: #e8e8e8;
+    --fm-body-bg: #d4d4d4;
+
+    /* FM Form Elements */
+    --fm-field-bg: #ffffff;
+    --fm-field-border: #b0b0b0;
+    --fm-field-focus: #0066cc;
+    --fm-field-label: #333333;
+    --fm-field-text: #1a1a1a;
+    --fm-field-placeholder: #999999;
+    --fm-field-disabled-bg: #f5f5f5;
+
+    /* FM Buttons */
+    --fm-btn-primary: #0066cc;
+    --fm-btn-primary-hover: #0052a3;
+    --fm-btn-default: #e0e0e0;
+    --fm-btn-default-hover: #d0d0d0;
+    --fm-btn-danger: #cc3333;
+    --fm-btn-success: #2d8a4e;
+
+    /* FM Portal */
+    --fm-portal-bg: #ffffff;
+    --fm-portal-header: #f0f0f0;
+    --fm-portal-border: #c8c8c8;
+    --fm-portal-row-alt: #f7f9fc;
+    --fm-portal-row-hover: #e3f0ff;
+    --fm-portal-row-selected: #cce0ff;
+
+    /* FM Tab Control */
+    --fm-tab-bg: #e8e8e8;
+    --fm-tab-active: #ffffff;
+    --fm-tab-border: #b0b0b0;
+    --fm-tab-text: #555555;
+    --fm-tab-active-text: #1a1a1a;
+
+    /* Status Colors */
+    --status-approved: #2d8a4e;
+    --status-pending: #cc8800;
+    --status-denied: #cc3333;
+    --status-review: #0066cc;
+    --status-active: #2d8a4e;
+    --status-inactive: #999999;
+
+    /* Typography */
+    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-data: 'JetBrains Mono', 'Consolas', monospace;
+
+    /* Spacing */
+    --sp-xs: 4px;
+    --sp-sm: 8px;
+    --sp-md: 12px;
+    --sp-lg: 16px;
+    --sp-xl: 24px;
+    --sp-2xl: 32px;
+
+    /* Borders */
+    --radius-sm: 3px;
+    --radius-md: 5px;
+    --radius-lg: 8px;
+}
+
+/* ── Base ── */
+html, body {
+    height: 100%;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--fm-field-text);
+    background: var(--fm-body-bg);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   TOOLBAR — FileMaker Main Toolbar
+   ============================================================================ */
+.fm-toolbar {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    background: var(--fm-toolbar-bg);
+    border-bottom: 1px solid var(--fm-toolbar-border);
+    padding: 0 var(--sp-md);
+    gap: var(--sp-xs);
+    user-select: none;
+    -webkit-app-region: drag;
+}
+
+.fm-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 var(--sp-sm);
+}
+
+.fm-toolbar-group + .fm-toolbar-group {
+    border-left: 1px solid #555;
+    margin-left: var(--sp-xs);
+}
+
+.fm-toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--fm-toolbar-text);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s;
+}
+
+.fm-toolbar-btn:hover {
+    background: var(--fm-toolbar-hover);
+}
+
+.fm-toolbar-btn.active {
+    background: var(--fm-toolbar-active);
+    color: #fff;
+}
+
+.fm-toolbar-title {
+    flex: 1;
+    text-align: center;
+    color: var(--fm-toolbar-text);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.fm-toolbar-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: rgba(45, 138, 78, 0.3);
+    border: 1px solid rgba(45, 138, 78, 0.5);
+    border-radius: 10px;
+    color: #7dce94;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   STATUS BAR — Record Navigation & Mode Indicator
+   ============================================================================ */
+.fm-statusbar {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    background: var(--fm-status-bg);
+    border-bottom: 1px solid var(--fm-status-border);
+    padding: 0 var(--sp-md);
+    gap: var(--sp-md);
+    font-size: 11px;
+    color: #666;
+}
+
+.fm-statusbar-left {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.fm-statusbar-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-sm);
+}
+
+.fm-statusbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+/* Record Navigator (Book Icon) */
+.fm-record-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: #fff;
+    border: 1px solid var(--fm-field-border);
+    border-radius: var(--radius-sm);
+    padding: 2px 4px;
+}
+
+.fm-record-nav button {
+    border: none;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    padding: 1px 4px;
+    font-size: 10px;
+    border-radius: 2px;
+}
+
+.fm-record-nav button:hover { background: #e0e0e0; }
+
+.fm-record-nav .current {
+    font-family: var(--font-data);
+    font-size: 11px;
+    min-width: 70px;
+    text-align: center;
+    padding: 0 4px;
+}
+
+.fm-mode-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+}
+
+.fm-mode-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--status-active);
+}
+
+/* ============================================================================
+   LAYOUT AREA — Main Content
+   ============================================================================ */
+.fm-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.fm-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Left Sidebar — Layout Navigation (like FM Layout popup) */
+.fm-sidebar {
+    width: 220px;
+    background: var(--fm-layout-bg);
+    border-right: 1px solid var(--fm-status-border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.fm-sidebar-header {
+    padding: var(--sp-md) var(--sp-lg);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    border-bottom: 1px solid var(--fm-status-border);
+}
+
+.fm-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    padding: var(--sp-sm) var(--sp-lg);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    font-size: 12px;
+    color: #555;
+}
+
+.fm-sidebar-item:hover {
+    background: rgba(0,0,0,0.05);
+    color: #333;
+}
+
+.fm-sidebar-item.active {
+    background: rgba(0, 102, 204, 0.08);
+    border-left-color: var(--fm-btn-primary);
+    color: var(--fm-btn-primary);
+    font-weight: 600;
+}
+
+.fm-sidebar-item .icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.fm-sidebar-item .badge {
+    margin-left: auto;
+    background: var(--fm-btn-primary);
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.fm-sidebar-divider {
+    height: 1px;
+    background: var(--fm-status-border);
+    margin: var(--sp-sm) 0;
+}
+
+/* ============================================================================
+   MAIN LAYOUT PANEL
+   ============================================================================ */
+.fm-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--fm-layout-bg);
+    overflow: hidden;
+}
+
+/* Tab Control */
+.fm-tab-control {
+    display: flex;
+    background: var(--fm-tab-bg);
+    border-bottom: 1px solid var(--fm-tab-border);
+    padding: 0 var(--sp-lg);
+    padding-top: var(--sp-xs);
+}
+
+.fm-tab {
+    padding: var(--sp-sm) var(--sp-lg);
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    font-size: 12px;
+    color: var(--fm-tab-text);
+    transition: all 0.15s;
+    position: relative;
+    top: 1px;
+}
+
+.fm-tab:hover { color: var(--fm-tab-active-text); }
+
+.fm-tab.active {
+    background: var(--fm-tab-active);
+    border-color: var(--fm-tab-border);
+    color: var(--fm-tab-active-text);
+    font-weight: 600;
+}
+
+/* Tab Panel Content */
+.fm-tab-panel {
+    flex: 1;
+    display: none;
+    overflow-y: auto;
+    background: #fff;
+    padding: var(--sp-xl);
+}
+
+.fm-tab-panel.active { display: flex; flex-direction: column; }
+
+/* ============================================================================
+   FORM LAYOUT — FileMaker Field Styling
+   ============================================================================ */
+.fm-form-section {
+    margin-bottom: var(--sp-xl);
+}
+
+.fm-form-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--fm-btn-primary);
+    margin-bottom: var(--sp-md);
+    padding-bottom: var(--sp-xs);
+    border-bottom: 2px solid var(--fm-btn-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fm-form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-sm);
+}
+
+.fm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.fm-field-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--fm-field-label);
+}
+
+.fm-field-input {
+    height: 28px;
+    padding: 0 var(--sp-sm);
+    border: 1px solid var(--fm-field-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--fm-field-text);
+    background: var(--fm-field-bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.fm-field-input:focus {
+    outline: none;
+    border-color: var(--fm-field-focus);
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+.fm-field-input:disabled, .fm-field-input[readonly] {
+    background: var(--fm-field-disabled-bg);
+    color: #888;
+}
+
+.fm-field-input.locked {
+    background: #fff8e1;
+    border-color: #e6c200;
+}
+
+select.fm-field-input {
+    cursor: pointer;
+    appearance: auto;
+}
+
+textarea.fm-field-input {
+    height: auto;
+    min-height: 60px;
+    padding: var(--sp-sm);
+    resize: vertical;
+}
+
+/* ============================================================================
+   PORTAL — List/Table View (FileMaker Portal equivalent)
+   ============================================================================ */
+.fm-portal {
+    border: 1px solid var(--fm-portal-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--fm-portal-bg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.fm-portal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sp-sm) var(--sp-md);
+    background: var(--fm-portal-header);
+    border-bottom: 1px solid var(--fm-portal-border);
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+}
+
+.fm-portal-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.fm-portal-search {
+    height: 24px;
+    width: 200px;
+    padding: 0 var(--sp-sm);
+    border: 1px solid var(--fm-field-border);
+    border-radius: 12px;
+    font-size: 11px;
+    background: #fff;
+}
+
+.fm-portal-search:focus {
+    outline: none;
+    border-color: var(--fm-field-focus);
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.15);
+}
+
+.fm-portal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.fm-portal-table thead {
+    background: var(--fm-portal-header);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.fm-portal-table th {
+    padding: var(--sp-sm) var(--sp-md);
+    text-align: left;
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+    border-bottom: 2px solid var(--fm-portal-border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.fm-portal-table th:hover { background: #e0e0e0; }
+
+.fm-portal-table th .sort-arrow { font-size: 8px; margin-left: 4px; }
+
+.fm-portal-table td {
+    padding: var(--sp-xs) var(--sp-md);
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.fm-portal-table tbody tr {
+    transition: background 0.1s;
+    cursor: pointer;
+}
+
+.fm-portal-table tbody tr:nth-child(even) { background: var(--fm-portal-row-alt); }
+.fm-portal-table tbody tr:hover { background: var(--fm-portal-row-hover); }
+.fm-portal-table tbody tr.selected { background: var(--fm-portal-row-selected); }
+
+.fm-portal-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.fm-portal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sp-sm) var(--sp-md);
+    background: var(--fm-portal-header);
+    border-top: 1px solid var(--fm-portal-border);
+    font-size: 11px;
+    color: #666;
+}
+
+/* ============================================================================
+   BUTTONS — FileMaker Button Bar
+   ============================================================================ */
+.fm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-xs);
+    height: 28px;
+    padding: 0 var(--sp-md);
+    border: 1px solid var(--fm-field-border);
+    border-radius: var(--radius-sm);
+    background: var(--fm-btn-default);
+    color: var(--fm-field-text);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.fm-btn:hover { background: var(--fm-btn-default-hover); }
+
+.fm-btn-primary {
+    background: var(--fm-btn-primary);
+    border-color: var(--fm-btn-primary);
+    color: #fff;
+}
+
+.fm-btn-primary:hover { background: var(--fm-btn-primary-hover); }
+
+.fm-btn-danger {
+    background: var(--fm-btn-danger);
+    border-color: var(--fm-btn-danger);
+    color: #fff;
+}
+
+.fm-btn-success {
+    background: var(--fm-btn-success);
+    border-color: var(--fm-btn-success);
+    color: #fff;
+}
+
+.fm-btn-sm {
+    height: 24px;
+    padding: 0 var(--sp-sm);
+    font-size: 11px;
+}
+
+.fm-button-bar {
+    display: flex;
+    gap: var(--sp-sm);
+    padding: var(--sp-md) 0;
+}
+
+/* ============================================================================
+   STATUS BADGES
+   ============================================================================ */
+.fm-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.fm-status-approved { background: #e8f5e9; color: var(--status-approved); }
+.fm-status-pending { background: #fff8e1; color: var(--status-pending); }
+.fm-status-denied { background: #ffebee; color: var(--status-denied); }
+.fm-status-review { background: #e3f2fd; color: var(--status-review); }
+.fm-status-active { background: #e8f5e9; color: var(--status-active); }
+.fm-status-inactive { background: #f5f5f5; color: var(--status-inactive); }
+
+/* ============================================================================
+   POPOVER (FileMaker Popover Button equivalent)
+   ============================================================================ */
+.fm-popover-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.fm-popover-overlay.active { display: flex; }
+
+.fm-popover {
+    background: #fff;
+    border: 1px solid var(--fm-portal-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.fm-popover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sp-md) var(--sp-lg);
+    background: var(--fm-portal-header);
+    border-bottom: 1px solid var(--fm-portal-border);
+    font-weight: 600;
+}
+
+.fm-popover-body {
+    padding: var(--sp-lg);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.fm-popover-close {
+    cursor: pointer;
+    font-size: 18px;
+    color: #999;
+    background: none;
+    border: none;
+}
+
+.fm-popover-close:hover { color: #333; }
+
+/* ============================================================================
+   DASHBOARD CARDS
+   ============================================================================ */
+.fm-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--sp-lg);
+    margin-bottom: var(--sp-xl);
+}
+
+.fm-kpi-card {
+    background: #fff;
+    border: 1px solid var(--fm-portal-border);
+    border-radius: var(--radius-md);
+    padding: var(--sp-lg);
+    text-align: center;
+    transition: box-shadow 0.2s;
+}
+
+.fm-kpi-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.fm-kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--fm-btn-primary);
+    font-family: var(--font-data);
+    line-height: 1.2;
+}
+
+.fm-kpi-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin-top: var(--sp-xs);
+    font-weight: 600;
+}
+
+.fm-kpi-card.success .fm-kpi-value { color: var(--status-approved); }
+.fm-kpi-card.warning .fm-kpi-value { color: var(--status-pending); }
+.fm-kpi-card.danger .fm-kpi-value { color: var(--status-denied); }
+
+/* ============================================================================
+   DETAIL PANEL (Master-Detail Slide Control)
+   ============================================================================ */
+.fm-master-detail {
+    display: flex;
+    gap: var(--sp-lg);
+    flex: 1;
+    overflow: hidden;
+}
+
+.fm-master-list {
+    width: 350px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.fm-detail-panel {
+    flex: 1;
+    overflow-y: auto;
+    background: #fafafa;
+    border: 1px solid var(--fm-portal-border);
+    border-radius: var(--radius-md);
+    padding: var(--sp-xl);
+}
+
+.fm-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.fm-detail-empty .icon { font-size: 48px; margin-bottom: var(--sp-md); }
+
+/* ============================================================================
+   AUDIT LOG — Monospace styling
+   ============================================================================ */
+.fm-audit-row {
+    font-family: var(--font-data);
+    font-size: 11px;
+}
+
+.fm-audit-row td { padding: 3px var(--sp-md); }
+
+.fm-audit-action {
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+}
+
+.fm-audit-action.CREATE { background: #e8f5e9; color: #2d8a4e; }
+.fm-audit-action.UPDATE { background: #e3f2fd; color: #0066cc; }
+.fm-audit-action.DELETE { background: #ffebee; color: #cc3333; }
+.fm-audit-action.APPROVE { background: #f3e5f5; color: #7b1fa2; }
+.fm-audit-action.LOGIN { background: #fff8e1; color: #cc8800; }
+.fm-audit-action.LOGOUT { background: #f5f5f5; color: #666; }
+
+/* ============================================================================
+   ERD VIEWER
+   ============================================================================ */
+.fm-erd-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.fm-erd-canvas {
+    flex: 1;
+    overflow: auto;
+    background: #f5f5f5;
+    padding: var(--sp-xl);
+}
+
+.fm-erd-table {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid var(--fm-btn-primary);
+    border-radius: var(--radius-md);
+    min-width: 180px;
+    margin: var(--sp-md);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    vertical-align: top;
+}
+
+.fm-erd-table-header {
+    background: var(--fm-btn-primary);
+    color: #fff;
+    padding: var(--sp-sm) var(--sp-md);
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.fm-erd-field {
+    padding: 3px var(--sp-md);
+    font-size: 11px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.fm-erd-field:last-child { border-bottom: none; }
+
+.fm-erd-field .key {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+.fm-erd-field .key.pk { background: #ffeb3b; color: #333; }
+.fm-erd-field .key.fk { background: #e3f2fd; color: #0066cc; }
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f0f0f0; }
+::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+
+/* ============================================================================
+   LOADING STATE
+   ============================================================================ */
+.fm-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: var(--sp-sm);
+    color: #888;
+    font-size: 13px;
+}
+
+.fm-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ddd;
+    border-top-color: var(--fm-btn-primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================================
+   RESPONSIVE (FileMaker Go / iPad)
+   ============================================================================ */
+@media (max-width: 768px) {
+    .fm-sidebar { display: none; }
+    .fm-master-detail { flex-direction: column; }
+    .fm-master-list { width: 100%; min-width: 0; max-height: 300px; }
+    .fm-dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================================
+   USER / ROLE INDICATOR
+   ============================================================================ */
+.fm-user-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    padding: var(--sp-sm) var(--sp-lg);
+    background: rgba(0, 102, 204, 0.05);
+    border-top: 1px solid var(--fm-status-border);
+    margin-top: auto;
+}
+
+.fm-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--fm-btn-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.fm-user-info {
+    font-size: 11px;
+}
+
+.fm-user-name { font-weight: 600; color: #333; }
+.fm-user-role { color: #888; font-size: 10px; }
+
+/* ============================================================================
+   STATUS BADGES (Claims, Providers, Audit)
+   ============================================================================ */
+.fm-status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.fm-status-badge.approved, .fm-status-badge.active { background: rgba(45,138,78,.12); color: var(--status-approved); }
+.fm-status-badge.pending  { background: rgba(204,136,0,.12); color: var(--status-pending); }
+.fm-status-badge.denied   { background: rgba(204,51,51,.12); color: var(--status-denied); }
+.fm-status-badge.review   { background: rgba(0,102,204,.12); color: var(--status-review); }
+.fm-status-badge.inactive { background: rgba(153,153,153,.12); color: var(--status-inactive); }
+
+/* ============================================================================
+   FORM GRID (Patient Detail, Medication Detail)
+   ============================================================================ */
+.fm-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.fm-field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.fm-field-row .fm-field-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--fm-field-label);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fm-field-row .fm-field-input {
+    font-size: 12px;
+    padding: 4px 6px;
+    background: var(--fm-field-bg);
+    border: 1px solid var(--fm-field-border);
+    border-radius: var(--radius-sm);
+    color: var(--fm-field-text);
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+/* ============================================================================
+   TAB PANEL VISIBILITY
+   ============================================================================ */
+.fm-tab-panel { display: none; }
+.fm-tab-panel.active { display: block; }
+
+/* ============================================================================
+   FM BUTTON VARIANTS
+   ============================================================================ */
+.fm-btn-danger {
+    background: var(--fm-btn-danger);
+    color: #fff;
+    border-color: var(--fm-btn-danger);
+}
+.fm-btn-danger:hover { background: #a82a2a; }
+
+/* ============================================================================
+   PORTAL ROW SELECTED STATE
+   ============================================================================ */
+.fm-portal-row.selected {
+    background: var(--fm-portal-row-selected) !important;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }

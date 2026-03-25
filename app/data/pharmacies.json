@@ -1,0 +1,67 @@
+[
+  {
+    "__pk_PharmacyID": "A9F4B837-B38B-450C-AD68-403938F5FD80",
+    "Name": "EPLS Specialty Pharmacy - Main",
+    "Type": "Internal",
+    "NCPDP_ID": "NCPDP352603",
+    "Address_Street": "2250 Erin Ct",
+    "Address_City": "Lancaster",
+    "Address_State": "PA",
+    "Address_Zip": "17601",
+    "Phone": "(717) 555-0100",
+    "DEA_Number": "AE5082836",
+    "Status": "Active"
+  },
+  {
+    "__pk_PharmacyID": "2660C52D-1A1E-4D8D-9644-ED092C44F341",
+    "Name": "EPLS Specialty Pharmacy - East",
+    "Type": "Internal",
+    "NCPDP_ID": "NCPDP321921",
+    "Address_Street": "1080 N Plum St",
+    "Address_City": "Lancaster",
+    "Address_State": "PA",
+    "Address_Zip": "17602",
+    "Phone": "(717) 555-0200",
+    "DEA_Number": "AE3859391",
+    "Status": "Active"
+  },
+  {
+    "__pk_PharmacyID": "A232C211-BD6E-4228-8C36-CC24EB6E588D",
+    "Name": "EPLS Mail-Order Fulfillment",
+    "Type": "Mail-Order",
+    "NCPDP_ID": "NCPDP889842",
+    "Address_Street": "500 Commerce Dr",
+    "Address_City": "Lancaster",
+    "Address_State": "PA",
+    "Address_Zip": "17603",
+    "Phone": "(717) 555-0300",
+    "DEA_Number": "AE2500416",
+    "Status": "Active"
+  },
+  {
+    "__pk_PharmacyID": "29B37466-5E0C-4627-8C8C-9C032D6BFD7A",
+    "Name": "CVS Pharmacy #4821",
+    "Type": "Partner",
+    "NCPDP_ID": "NCPDP210592",
+    "Address_Street": "1603 Lincoln Hwy E",
+    "Address_City": "Lancaster",
+    "Address_State": "PA",
+    "Address_Zip": "17602",
+    "Phone": "(717) 555-0400",
+    "DEA_Number": null,
+    "Status": "Active"
+  },
+  {
+    "__pk_PharmacyID": "D98F70A9-92A5-4ACB-9FAD-A68696A3FE7B",
+    "Name": "Rite Aid #1237",
+    "Type": "Partner",
+    "NCPDP_ID": "NCPDP556018",
+    "Address_Street": "878 E Main St",
+    "Address_City": "Ephrata",
+    "Address_State": "PA",
+    "Address_Zip": "17522",
+    "Phone": "(717) 555-0500",
+    "DEA_Number": null,
+    "Status": "Active"
+  }
+]
